@@ -17,7 +17,7 @@ function App() {
       setError('');
     } else {
       setIsLoggedIn(false);
-      setError('Invalid username or password');
+      setError('Invalid Username or Password');
     }
   };
 
