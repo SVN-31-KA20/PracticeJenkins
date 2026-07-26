@@ -39,7 +39,7 @@ pipeline {
         stage('Stop Existing Container') {
             steps {
                 echo 'Stopping existing container if running...'
-                bat "docker rm -f ${env.CONTAINER_NAME} 2>nul || exit /b 0"
+                bat "docker rm -f ${env.CONTAINER_NAME} >nul 2>&1"
             }
         }
 
