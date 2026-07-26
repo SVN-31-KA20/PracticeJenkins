@@ -5,10 +5,6 @@ pipeline {
         CI = 'true'
     }
 
-    tools {
-        nodejs 'NodeJS'
-    }
-
     stages {
 
         stage('Environment Check') {
