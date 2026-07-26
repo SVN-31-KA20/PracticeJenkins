@@ -1,22 +1,53 @@
 pipeline {
     agent any
 
+    environment {
+        CI = 'true'
+    }
+
     stages {
-        stage('Git Pull') {
+        stage('Checkout') {
             steps {
-                echo 'Project folder informatioin is fetched'
+                checkout scm
             }
         }
+
+        stage('Install dependencies') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'npm ci'
+                    } else {
+                        bat 'npm ci'
+                    }
+                }
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Project build completed'
+                script {
+                    if (isUnix()) {
+                        sh 'npm run build'
+                    } else {
+                        bat 'npm run build'
+                    }
+                }
             }
         }
-        stage('Tets') {
+
+        stage('Test') {
             steps {
-                echo 'Unit test cases are completed'
+                script {
+                    if (isUnix()) {
+                        sh 'npm test'
+                    } else {
+                        bat 'npm test'
+                    }
+                }
             }
         }
+
         stage('Deploy') {
             steps {
                 echo 'Project is deployed'
