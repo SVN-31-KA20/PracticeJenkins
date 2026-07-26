@@ -5,53 +5,51 @@ pipeline {
         CI = 'true'
     }
 
+    tools {
+        nodejs 'NodeJS'
+    }
+
     stages {
-        stage('Checkout') {
+
+        stage('Environment Check') {
             steps {
-                checkout scm
+                bat 'node --version'
+                bat 'npm --version'
             }
         }
 
-        stage('Install dependencies') {
+        stage('Install Dependencies') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh 'npm ci'
-                    } else {
-                        bat 'npm ci'
-                    }
-                }
+                bat 'npm ci'
             }
         }
 
         stage('Build') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh 'npm run build'
-                    } else {
-                        bat 'npm run build'
-                    }
-                }
+                bat 'npm run build'
             }
         }
 
         stage('Test') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh 'npm test'
-                    } else {
-                        bat 'npm test'
-                    }
-                }
+                bat 'npm test -- --watchAll=false'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Project is deployed'
+                echo 'React application build completed successfully.'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed. Check the console output.'
         }
     }
 }
